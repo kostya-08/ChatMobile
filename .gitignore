@@ -1,0 +1,24 @@
+# Android Studio
+.gradle/
+/build/
+**/build/
+.idea/
+*.iml
+*.iws
+
+# User-specific files
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# MacOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Other
+*.apk
+*.aar
+*.log
