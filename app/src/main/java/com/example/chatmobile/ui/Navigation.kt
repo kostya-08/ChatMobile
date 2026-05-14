@@ -5,9 +5,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.NavHostController
-import com.example.messenger.ui.screens.ChatListScreen
-import com.example.messenger.ui.screens.ChatScreen
-import com.example.messenger.ui.screens.ProfileScreen
+import com.example.chatmobile.ui.screens.ChatListScreen
+import com.example.chatmobile.ui.screens.ChatScreen
+import com.example.chatmobile.ui.screens.ProfileScreen
 import com.example.messenger.ui.screens.SettingsScreen
 
 @Composable

@@ -1,52 +1,133 @@
 package com.example.messenger.ui.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.messenger.ui.components.BottomBar
+import com.example.chatmobile.ui.components.BottomBar
 
 @Composable
 fun SettingsScreen(navController: NavController) {
-
-    val settings = listOf(
-        "Аккаунт",
-        "Уведомления",
-        "Безопасность",
-        "Тема",
-        "О приложении"
+    val settingsItems = listOf(
+        SettingsItem("Аккаунт", Icons.Default.Person),
+        SettingsItem("Уведомления", Icons.Default.Notifications),
+        SettingsItem("Безопасность", Icons.Default.Security),
+        SettingsItem("Тема", Icons.Default.Palette),
+        SettingsItem("О приложении", Icons.Default.Info)
     )
 
     Scaffold(
-        bottomBar = {
-            BottomBar(navController, "settings")
-        }
+        containerColor = Color(0xFFBDBDBD), // серый фон как в ChatList
+        bottomBar = { BottomBar(navController, "settings") }
     ) { padding ->
-
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
         ) {
-
-            items(settings) { item ->
-
-                Card(
+            // Верхняя панель (как в ChatList)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color(0xFFFFC107))
+                    .padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 10.dp)
+            ) {
+                Row(
                     modifier = Modifier
-                        .padding(8.dp)
                         .fillMaxWidth()
+                        .clip(RoundedCornerShape(24.dp))
+                        .background(Color.White)
+                        .padding(horizontal = 14.dp, vertical = 5.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "Setting",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                    }
 
-                    Text(
-                        text = item,
-                        modifier = Modifier.padding(16.dp)
+                    // Чёрный кружок (статус/аватар как на макете)
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(Color.Black)
                     )
+                }
+            }
+
+            // Список настроек
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 10.dp, vertical = 8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(settingsItems) { item ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(18.dp))
+                            .background(Color(0xFFAFAFAF))
+                            .clickable { /* TODO: навигация */ }
+                            .padding(14.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(14.dp)
+                        ) {
+                            // Иконка в кружке
+                            Box(
+                                modifier = Modifier
+                                    .size(42.dp)
+                                    .clip(CircleShape)
+                                    .background(Color.Black),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = item.icon,
+                                    contentDescription = null,
+                                    tint = Color.White,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                            }
+
+                            Text(
+                                text = item.title,
+                                fontSize = 17.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.Black
+                            )
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+data class SettingsItem(
+    val title: String,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector
+)

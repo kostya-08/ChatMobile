@@ -1,12 +1,20 @@
-package com.example.messenger.ui.components
+package com.example.chatmobile.ui.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material3.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.chatmobile.R
 
 @Composable
 fun BottomBar(
@@ -14,36 +22,67 @@ fun BottomBar(
     selected: String
 ) {
 
-    NavigationBar {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
 
-        NavigationBarItem(
-            selected = selected == "profile",
-            onClick = {
-                navController.navigate("profile")
-            },
-            icon = {
-                Icon(Icons.Default.Person, null)
-            }
-        )
+        Row(
+            modifier = Modifier
+                .clip(RoundedCornerShape(35.dp))
+                .border(
+                    width = 3.dp,
+                    color = Color.Black,
+                    shape = RoundedCornerShape(35.dp)
+                )
+                .background(Color(0xFFFFC107))
+                .padding(horizontal = 24.dp, vertical = 10.dp)
+                .fillMaxWidth(),
 
-        NavigationBarItem(
-            selected = selected == "chats",
-            onClick = {
-                navController.navigate("chats")
-            },
-            icon = {
-                Icon(Icons.Default.Chat, null)
-            }
-        )
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
 
-        NavigationBarItem(
-            selected = selected == "settings",
-            onClick = {
-                navController.navigate("settings")
-            },
-            icon = {
-                Icon(Icons.Default.Settings, null)
+            IconButton(
+                onClick = {
+                    navController.navigate("profile")
+                }
+            ) {
+
+                Icon(
+                    painter = painterResource(id = R.drawable.profile),
+                    contentDescription = null,
+                    tint = Color.Black
+                )
             }
-        )
+
+            IconButton(
+                onClick = {
+                    navController.navigate("chats")
+                }
+            ) {
+
+                Icon(
+                    painter = painterResource(id = R.drawable.chat),
+                    contentDescription = null,
+                    tint = Color.Black
+                )
+            }
+
+            IconButton(
+                onClick = {
+                    navController.navigate("settings")
+                }
+            ) {
+
+                Icon(
+                    painter = painterResource(id = R.drawable.setting),
+                    contentDescription = null,
+                    tint = Color.Black
+                )
+            }
+        }
     }
 }
