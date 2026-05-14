@@ -1,6 +1,7 @@
 package com.example.chatmobile.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -35,38 +36,59 @@ fun ProfileScreen(navController: NavController) {
 
         Column(
             modifier = Modifier
-                .padding(padding)
+                .padding(start = 10.dp, end = 10.dp, top = 25.dp)
                 .fillMaxSize()
         ) {
 
             // Верхняя панель
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFFFC107))
-                    .padding(
-                        top = 12.dp,
-                        start = 12.dp,
-                        end = 12.dp,
-                        bottom = 10.dp
+                    .border(
+                        width = 3.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(35.dp)
                     )
+                    .clip(RoundedCornerShape(35.dp))
+                    .background(Color(0xFFFFC107))
+                    .padding(top = 15.dp, start = 10.dp, end = 10.dp, bottom = 10.dp)
+
             ) {
 
-                Box(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(22.dp))
+                        .clip(RoundedCornerShape(35.dp))
                         .background(Color.White)
-                        .padding(vertical = 10.dp),
+                        .padding(
+                            horizontal = 24.dp,
+                            vertical = 10.dp
+                        ),
 
-                    contentAlignment = Alignment.Center
+                    verticalAlignment = Alignment.CenterVertically
+
                 ) {
 
-                    Text(
-                        text = "Profile",
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
+                    // Заголовок
+                    Box(
+                        modifier = Modifier.weight(1f)
+                            .padding(start = 24.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+
+                        Text(
+                            text = "Profile",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.Black
+                        )
+                    }
+
+                    // Аватар
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(Color.White)
                     )
                 }
             }

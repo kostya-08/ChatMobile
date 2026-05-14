@@ -1,6 +1,7 @@
 package com.example.messenger.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,26 +38,31 @@ fun SettingsScreen(navController: NavController) {
     ) { padding ->
         Column(
             modifier = Modifier
-                .padding(padding)
+                .padding(start = 10.dp, end = 10.dp, top = 25.dp)
                 .fillMaxSize()
         ) {
             // Верхняя панель (как в ChatList)
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .background(Color(0xFFFFC107))
-                    .padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 10.dp)
+                    .border(
+                        width = 3.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(35.dp)
+                    )
+                    .clip(RoundedCornerShape(35.dp))                    .background(Color(0xFFFFC107))
+                    .padding(top = 15.dp, start = 10.dp, end = 10.dp, bottom = 10.dp)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(24.dp))
+                        .clip(RoundedCornerShape(35.dp))
                         .background(Color.White)
-                        .padding(horizontal = 14.dp, vertical = 5.dp),
+                        .padding(horizontal = 24.dp, vertical = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1f)
+                            .padding(start = 24.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(

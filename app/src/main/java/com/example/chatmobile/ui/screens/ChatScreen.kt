@@ -1,6 +1,7 @@
 package com.example.chatmobile.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,30 +49,39 @@ fun ChatScreen(
     Scaffold(
         containerColor = Color(0xFFBDBDBD)
     ) { padding ->
+
         Column(
             modifier = Modifier
-                .padding(padding)
+                .padding(start = 10.dp, end = 10.dp, top = 25.dp)
                 .fillMaxSize()
         ) {
             // Верхняя панель
             Box(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .border(
+                        width = 3.dp,
+                        color = Color.Black,
+                        shape = RoundedCornerShape(35.dp)
+                    )
+                    .clip(RoundedCornerShape(35.dp))
                     .background(Color(0xFFFFC107))
-                    .padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 10.dp)
+                    .padding(top = 15.dp, start = 10.dp, end = 10.dp, bottom = 10.dp)
             ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(35.dp))
                         .background(Color.White)
-                        .padding(horizontal = 14.dp, vertical = 5.dp),
+                        .padding(
+                            horizontal = 24.dp,
+                            vertical = 10.dp),
+
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // Кнопка назад
                     Box(
                         modifier = Modifier
-                            .size(42.dp)
+                            .size(32.dp)
                             .clip(CircleShape)
                             .clickable { navController.popBackStack() },
                         contentAlignment = Alignment.Center
@@ -85,7 +95,8 @@ fun ChatScreen(
 
                     // Имя пользователя
                     Box(
-                        modifier = Modifier.weight(1f),
+                        modifier = Modifier.weight(1f)
+                            .padding(start = 24.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
