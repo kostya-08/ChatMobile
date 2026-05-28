@@ -1,13 +1,12 @@
 package com.example.chatmobile.ui
+
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import androidx.navigation.NavHostController
-import com.example.chatmobile.ui.screens.ChatListScreen
-import com.example.chatmobile.ui.screens.ChatScreen
-import com.example.chatmobile.ui.screens.ProfileScreen
+import com.example.chatmobile.ui.screens.*
 import com.example.messenger.ui.screens.SettingsScreen
 
 @Composable
@@ -17,33 +16,33 @@ fun Navigation(navController: NavHostController) {
         navController = navController,
         startDestination = "chats"
     ) {
+        composable("chats") {
+            ChatListScreen(navController)
+        }
 
         composable("profile") {
             ProfileScreen(navController)
-        }
-
-        composable("chats") {
-            ChatListScreen(navController)
         }
 
         composable("settings") {
             SettingsScreen(navController)
         }
 
+        // Новый маршрут с chatId
         composable(
-            "chat/{name}",
+            route = "chat/{chatId}/{username}",
             arguments = listOf(
-                navArgument("name") {
-                    type = NavType.StringType
-                }
+                navArgument("chatId") { type = NavType.StringType },
+                navArgument("username") { type = NavType.StringType }
             )
-        ) { backStack ->
-
-            val name = backStack.arguments?.getString("name") ?: ""
+        ) { backStackEntry ->
+            val chatId = backStackEntry.arguments?.getString("chatId") ?: ""
+            val username = backStackEntry.arguments?.getString("username") ?: ""
 
             ChatScreen(
                 navController = navController,
-                username = name
+                chatId = chatId,
+                username = username
             )
         }
     }

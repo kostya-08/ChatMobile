@@ -1,7 +1,6 @@
 package com.example.chatmobile.ui.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,188 +10,197 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.chatmobile.data.local.entity.ChatEntity
 import com.example.chatmobile.ui.components.BottomBar
-import com.example.messenger.model.Chat
+import com.example.chatmobile.ui.viewmodel.ChatListViewModel
 
 @Composable
-fun ChatListScreen(navController: NavController) {
-
-    val chats = listOf(
-        Chat("Alex", "Привет"),
-        Chat("Maria", "Как дела?"),
-        Chat("John", "Увидимся завтра"),
-        Chat("Kate", "Ок")
-    )
+fun ChatListScreen(
+    navController: NavController,
+    viewModel: ChatListViewModel = viewModel()
+) {
+    val chats by viewModel.chats.collectAsState()
+    var showAddDialog by remember { mutableStateOf(false) }
 
     Scaffold(
-
         containerColor = Color(0xFFBDBDBD),
-
-        bottomBar = {
-            BottomBar(navController, "chats")
-        },
-
+        bottomBar = { BottomBar(navController, "chats") },
         floatingActionButton = {
-
-            Box(
-                modifier = Modifier
-                    .size(60.dp)
-                    .clip(CircleShape)
-                    .background(Color.Black)
-                    .clickable {
-
-                    },
-
-                contentAlignment = Alignment.Center
+            FloatingActionButton(
+                onClick = { showAddDialog = true },
+                containerColor = Color.Black,
+                contentColor = Color.White
             ) {
-
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(30.dp)
-                )
+                Icon(Icons.Default.Add, contentDescription = "Добавить контакт")
             }
         }
-
     ) { padding ->
-
         Column(
             modifier = Modifier
-                .padding(start = 10.dp, end = 10.dp, top = 25.dp)
+                .padding(padding)
                 .fillMaxSize()
         ) {
+            TopBarChatList()
 
-            // Верхняя панель
-            Box(
-                modifier = Modifier
-                    .border(
-                        width = 3.dp,
-                        color = Color.Black,
-                        shape = RoundedCornerShape(35.dp)
-                    )
-                    .clip(RoundedCornerShape(35.dp))
-                    .background(Color(0xFFFFC107))
-                    .padding(top = 15.dp, start = 10.dp, end = 10.dp, bottom = 10.dp)
-
-            ) {
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(35.dp))
-                        .background(Color.White)
-                        .padding(
-                            horizontal = 24.dp,
-                            vertical = 10.dp
-                        ),
-
-                    verticalAlignment = Alignment.CenterVertically
-
-                ) {
-
-                    // Заголовок
-                    Box(
-                        modifier = Modifier.weight(1f)
-                            .padding(start = 24.dp),
-                    contentAlignment = Alignment.Center
-                    ) {
-
-                        Text(
-                            text = "Chat",
-                            fontSize = 22.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black
-                        )
-                    }
-
-                    // Аватар
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .background(Color.Black)
-                    )
-                }
-            }
-
-            // Список чатов
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 10.dp)
+                    .padding(horizontal = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
                 items(chats) { chat ->
+                    ChatItem(chat = chat) {
+                        // Изменено здесь — теперь передаём и id, и имя
+                        navController.navigate("chat/${chat.id}/${chat.name}")
+                    }
+                }
 
-                    Box(
-                        modifier = Modifier
-                            .padding(vertical = 6.dp)
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(35.dp))
-                            .background(Color(0xFFAFAFAF))
-                            .clickable {
-                                navController.navigate("chat/${chat.name}")
-                            }
-                            .padding(12.dp)
-                    ) {
-
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
+                if (chats.isEmpty()) {
+                    item {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(top = 100.dp),
+                            contentAlignment = Alignment.Center
                         ) {
-
-                            Box(
-                                modifier = Modifier
-                                    .size(42.dp)
-                                    .clip(CircleShape)
-                                    .background(Color.Black),
-
-                                contentAlignment = Alignment.Center
-                            ) {
-
-                                Icon(
-                                    imageVector = Icons.Default.Person,
-                                    contentDescription = null,
-                                    tint = Color.White,
-                                    modifier = Modifier.size(22.dp)
-                                )
-                            }
-
-                            Spacer(modifier = Modifier.width(12.dp))
-
-                            Column {
-
-                                Text(
-                                    text = chat.name,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 15.sp,
-                                    color = Color.Black
-                                )
-
-                                Spacer(modifier = Modifier.height(2.dp))
-
-                                Text(
-                                    text = chat.lastMessage,
-                                    fontSize = 13.sp,
-                                    color = Color.DarkGray
-                                )
-                            }
+                            Text(
+                                text = "Пока нет чатов\nНажмите + чтобы добавить контакт",
+                                color = Color.DarkGray,
+                                textAlign = TextAlign.Center,
+                                fontSize = 16.sp
+                            )
                         }
                     }
                 }
             }
         }
     }
+
+    if (showAddDialog) {
+        AddContactDialog(
+            onDismiss = { showAddDialog = false },
+            onAdd = { name ->
+                viewModel.addNewChat(name)
+                showAddDialog = false
+            }
+        )
+    }
+}
+
+@Composable
+private fun TopBarChatList() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color(0xFFFFC107))
+            .padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 10.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(24.dp))
+                .background(Color.White)
+                .padding(horizontal = 14.dp, vertical = 5.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                Text(
+                    text = "Chat",
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clip(CircleShape)
+                    .background(Color.Black)
+            )
+        }
+    }
+}
+
+@Composable
+private fun ChatItem(chat: ChatEntity, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(35.dp))
+            .background(Color(0xFFAFAFAF))
+            .clickable { onClick() }
+            .padding(12.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Box(
+                modifier = Modifier
+                    .size(42.dp)
+                    .clip(CircleShape)
+                    .background(Color.Black),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(Icons.Default.Person, contentDescription = null, tint = Color.White)
+            }
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Column {
+                Text(
+                    text = chat.name,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = if (chat.lastMessage.isEmpty()) "Новый контакт" else chat.lastMessage,
+                    fontSize = 13.sp,
+                    color = Color.DarkGray
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun AddContactDialog(
+    onDismiss: () -> Unit,
+    onAdd: (String) -> Unit
+) {
+    var name by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Новый контакт") },
+        text = {
+            OutlinedTextField(
+                value = name,
+                onValueChange = { name = it },
+                label = { Text("Имя контакта") },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
+        confirmButton = {
+            Button(onClick = { if (name.isNotBlank()) onAdd(name) }) {
+                Text("Добавить")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Отмена")
+            }
+        }
+    )
 }
